@@ -197,7 +197,15 @@ class Database extends Config
         $this->default['database'] = getenv('MYSQLDATABASE') ?: $this->default['database'];
         $this->default['port']     = (int) (getenv('MYSQLPORT') ?: $this->default['port']);
 
-        if ($sslCa = getenv('MYSQL_SSL_CA')) {
+        $sslCa = getenv('MYSQL_SSL_CA') ?: '';
+
+        // Render secret files are mounted read-only. Copying the Aiven CA
+        // into /tmp at container startup makes it readable by Apache/PHP.
+        if ($sslCa && ! is_readable($sslCa) && is_readable('/tmp/aiven-ca.pem')) {
+            $sslCa = '/tmp/aiven-ca.pem';
+        }
+
+        if ($sslCa) {
             error_log(sprintf(
                 'Aiven SSL diagnostics: ca=%s readable=%s size=%s',
                 $sslCa,
