@@ -1,8 +1,9 @@
 FROM php:8.2-apache
 
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends libicu-dev unzip \
-    && docker-php-ext-install intl mbstring mysqli \
+    && apt-get install -y --no-install-recommends libicu-dev libonig-dev unzip \
+    && docker-php-ext-configure intl \
+    && docker-php-ext-install -j"$(nproc)" intl mbstring mysqli \
     && a2enmod rewrite \
     && rm -rf /var/lib/apt/lists/*
 
@@ -11,7 +12,7 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
 ENV PORT=10000
 
-RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' \
+RUN sed -ri -e "s!/var/www/html!${APACHE_DOCUMENT_ROOT}!g" \
     /etc/apache2/sites-available/*.conf \
     /etc/apache2/apache2.conf \
     /etc/apache2/conf-available/*.conf \

@@ -197,6 +197,13 @@ class Database extends Config
         $this->default['database'] = getenv('MYSQLDATABASE') ?: $this->default['database'];
         $this->default['port']     = (int) (getenv('MYSQLPORT') ?: $this->default['port']);
 
+        if ($sslCa = getenv('MYSQL_SSL_CA')) {
+            $this->default['encrypt'] = [
+                'ssl_ca'     => $sslCa,
+                'ssl_verify' => true,
+            ];
+        }
+
         // Ensure that we always set the database group to 'tests' if
         // we are currently running an automated test suite, so that
         // we don't overwrite live data on accident.
