@@ -1,0 +1,11 @@
+.git
+.github
+.env
+.env.*
+node_modules
+vendor
+writable/cache/*
+writable/logs/*
+writable/session/*
+tests
+*.log

@@ -1,0 +1,8 @@
+.env
+.env.*
+!.env.example
+vendor/
+writable/cache/*
+writable/logs/*
+writable/session/*
+writable/uploads/*
