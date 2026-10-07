@@ -32,4 +32,4 @@ RUN mkdir -p writable/cache writable/logs writable/session writable/uploads \
 
 EXPOSE 10000
 
-CMD ["apache2-foreground"]
+CMD ["sh", "-c", "if [ -f /etc/secrets/aiven-ca.pem ]; then chmod 644 /etc/secrets/aiven-ca.pem; fi; exec apache2-foreground"]
