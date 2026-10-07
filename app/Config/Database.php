@@ -206,12 +206,6 @@ class Database extends Config
         }
 
         if ($sslCa) {
-            error_log(sprintf(
-                'Aiven SSL diagnostics: ca=%s readable=%s size=%s',
-                $sslCa,
-                is_readable($sslCa) ? 'yes' : 'no',
-                is_file($sslCa) ? (string) filesize($sslCa) : 'missing'
-            ));
             $this->default['encrypt'] = [
                 'ssl_ca'     => $sslCa,
                 'ssl_verify' => true,
